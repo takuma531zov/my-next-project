@@ -13,14 +13,16 @@ type Props = {
 	}>;
 };
 
+export const revalidate = 0;
+
 export default async function Page(props: Props) {
-    const searchParams = await props.searchParams;
-    const params = await props.params;
-    const data = await getNewsDetail(params.slug, {
+	const searchParams = await props.searchParams;
+	const params = await props.params;
+	const data = await getNewsDetail(params.slug, {
 		draftKey: searchParams.dk,
 	}).catch(notFound);
 
-    return (
+	return (
 		<>
 			<Article data={data} />
 			<div className={styles.footer}>
