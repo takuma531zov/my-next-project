@@ -4,21 +4,28 @@ import { getNewsDetail } from "@/app/_libs/microcms";
 import Article from "@/app/_components/Article";
 import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
+type Params = Promise<{
+	slug: string;
+}>;
+
+type SearchParams = Promise<{
+	dk?: string;
+}>;
 
 type Props = {
-	params: Promise<{ slug: string }>;
-	searchParams: {
-		dk?: string;
-	};
+	params: Params;
+	searchParams: SearchParams;
 };
 
 export async function generateMetadata({
 	params,
 	searchParams,
 }: Props): Promise<Metadata> {
-	const resolvedParams = await params;
+	const resolvedParams = await params; // 非同期でparamsを取得
+	const resolvedSearchParams = await searchParams; // 非同期でsearchParamsを取得
+
 	const data = await getNewsDetail(resolvedParams.slug, {
-		draftKey: searchParams.dk,
+		draftKey: resolvedSearchParams.dk,
 	});
 
 	return {
