@@ -6,9 +6,7 @@ import ButtonLink from "@/app/_components/ButtonLink";
 import styles from "./page.module.css";
 
 type Props = {
-	params: {
-		slug: string;
-	};
+	params: Promise<{ slug: string }>;
 	searchParams: {
 		dk?: string;
 	};
@@ -18,7 +16,8 @@ export async function generateMetadata({
 	params,
 	searchParams,
 }: Props): Promise<Metadata> {
-	const data = await getNewsDetail(params.slug, {
+	const resolvedParams = await params;
+	const data = await getNewsDetail(resolvedParams.slug, {
 		draftKey: searchParams.dk,
 	});
 
@@ -28,7 +27,7 @@ export async function generateMetadata({
 		openGraph: {
 			title: data.title,
 			description: data.description,
-			url: `https://example.com/news/${params.slug}`,
+			url: `https://example.com/news/${resolvedParams.slug}`,
 			images: [data?.thumbnail?.url ?? ""],
 		},
 	};
